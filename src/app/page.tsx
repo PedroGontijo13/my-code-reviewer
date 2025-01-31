@@ -1,15 +1,18 @@
-'use client'; 
+'use client';
 
 import { useState } from 'react';
+import Form from './components/Form/Form';
+import DiffOutput from './components/DiffOutput/DiffOutput';
 
 export default function Home() {
-    const [repoUrl, setRepoUrl] = useState<string>('');
-    const [branch1, setBranch1] = useState<string>('');
-    const [branch2, setBranch2] = useState<string>('');
     const [diff, setDiff] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
 
-    const handleCompare = async () => {
+    const handleCompare = async (
+        repoUrl: string,
+        branch1: string,
+        branch2: string
+    ) => {
         setLoading(true);
         try {
             const response = await fetch('/api/compare-branches', {
@@ -28,41 +31,14 @@ export default function Home() {
     };
 
     return (
-        <div>
-            <h1>Code Reviewer</h1>
-            <div>
-                <input
-                    type="text"
-                    placeholder="Repository URL"
-                    value={repoUrl}
-                    onChange={(e) => setRepoUrl(e.target.value)}
-                />
+        <div className="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-3xl mx-auto">
+                <h1 className="text-3xl font-bold text-center text-gray-900 mb-8">
+                    Code Reviewer
+                </h1>
+                <Form onSubmit={handleCompare} loading={loading} />
+                {diff && <DiffOutput diff={diff} />}
             </div>
-            <div>
-                <input
-                    type="text"
-                    placeholder="Branch 1"
-                    value={branch1}
-                    onChange={(e) => setBranch1(e.target.value)}
-                />
-            </div>
-            <div>
-                <input
-                    type="text"
-                    placeholder="Branch 2"
-                    value={branch2}
-                    onChange={(e) => setBranch2(e.target.value)}
-                />
-            </div>
-            <button onClick={handleCompare} disabled={loading}>
-                {loading ? 'Comparing...' : 'Compare Branches'}
-            </button>
-            {diff && (
-                <div>
-                    <h2>Diff:</h2>
-                    <pre>{diff}</pre>
-                </div>
-            )}
         </div>
     );
 }
