@@ -6,6 +6,7 @@ import DiffOutput from './components/DiffOutput/DiffOutput';
 
 export default function Home() {
     const [diff, setDiff] = useState<string>('');
+    const [analysis, setAnalysis] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
 
     const handleCompare = async (
@@ -22,6 +23,7 @@ export default function Home() {
             });
             const data = await response.json();
             setDiff(data.diff || data.error);
+            setAnalysis(data.analysis || 'No AI analysis available');
         } catch (error) {
             console.error('Error:', error);
             setDiff('Failed to compare branches');
@@ -37,7 +39,7 @@ export default function Home() {
                     Code Reviewer
                 </h1>
                 <Form onSubmit={handleCompare} loading={loading} />
-                {diff && <DiffOutput diff={diff} />}
+                {diff && <DiffOutput diff={diff} analysis={analysis} />}
             </div>
         </div>
     );
