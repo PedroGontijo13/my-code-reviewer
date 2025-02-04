@@ -23,7 +23,23 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: stderr }, { status: 500 });
         }
 
-        return NextResponse.json({ diff: stdout }, { status: 200 });
+        // Send the diff to the external API
+        const apiResponse = await fetch('http://localhost:3003/ia', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ text: 'oi' }),
+        });
+
+        if (!apiResponse.ok) {
+            throw new Error(`API request failed with status ${apiResponse.status}`);
+        }
+
+        const apiResponseData = await apiResponse.json();
+        console.log("API Response:", apiResponseData);
+
+        return NextResponse.json({ diff: stdout, apiResponse: apiResponseData }, { status: 200 });
     } catch (error) {
         console.error("Server Error:", error);
         return NextResponse.json({ error: 'Failed to compare branches' }, { status: 500 });
