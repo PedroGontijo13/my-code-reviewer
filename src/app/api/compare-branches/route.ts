@@ -29,7 +29,7 @@ export async function POST(req: Request) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ text: 'oi' }),
+            body: JSON.stringify({ text: 'Check the changes of between the branches:' + stdout }),
         });
 
         if (!apiResponse.ok) {

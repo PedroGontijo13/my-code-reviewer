@@ -1,12 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Form from './components/Form/Form';
 import DiffOutput from './components/DiffOutput/DiffOutput';
 
 export default function Home() {
     const [diff, setDiff] = useState<string>('');
+    const [apiResponse, setApiResponse] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
+    useEffect(() => {
+        console.log(apiResponse)
+    }, [apiResponse]);
 
     const handleCompare = async (
         repoUrl: string,
@@ -22,6 +26,7 @@ export default function Home() {
             });
             const data = await response.json();
             setDiff(data.diff || data.error);
+            setApiResponse(data.apiResponse || '');
         } catch (error) {
             console.error('Error:', error);
             setDiff('Failed to compare branches');
@@ -37,7 +42,7 @@ export default function Home() {
                     Code Reviewer
                 </h1>
                 <Form onSubmit={handleCompare} loading={loading} />
-                {diff && <DiffOutput diff={diff} />}
+                {diff && apiResponse && <DiffOutput diff={diff} apiResponse={apiResponse} />}
             </div>
         </div>
     );
