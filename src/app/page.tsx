@@ -4,9 +4,13 @@ import { useEffect, useState } from 'react';
 import Form from './components/Form/Form';
 import DiffOutput from './components/DiffOutput/DiffOutput';
 
+interface ApiResponse {
+    response: string;
+}
+
 export default function Home() {
     const [diff, setDiff] = useState<string>('');
-    const [apiResponse, setApiResponse] = useState<string>('');
+    const [apiResponse, setApiResponse] = useState<ApiResponse>();
     const [loading, setLoading] = useState<boolean>(false);
     useEffect(() => {
         console.log(apiResponse)

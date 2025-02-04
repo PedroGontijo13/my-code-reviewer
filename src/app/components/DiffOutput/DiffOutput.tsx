@@ -1,7 +1,3 @@
-'use client';
-
-import { useEffect } from "react";
-
 interface DiffOutputProps {
     diff: string;
     apiResponse: {
